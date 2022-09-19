@@ -1,14 +1,17 @@
-//ESTA FUNCION CONTROLA LA ANIMACION DE LA LANDING PAGE "HOME"//
+//VARIABLES GLOBALES//
 
-function createSky() {
+let menuKey = true;
 
-    const section = document.getElementById('background-animation1');
+//ESTA FUNCION GENERA EL BACKGROUND//
+
+function createBackground(sectionname, spansize, spanproportions, time) {
+    const section = document.getElementById(sectionname);
     const star = document.createElement('span');
 
-    let size = Math.random() * 4;
+    let size = Math.random() *spansize;
 
-    star.style.width = 2 + size + 'px'; 
-    star.style.height = 2 + size + 'px';
+    star.style.width = spanproportions + size + 'px'; 
+    star.style.height = spanproportions + size + 'px';
 
     star.style.top = Math.random() * innerHeight + 'px';
     star.style.left = Math.random() * innerWidth + 'px';
@@ -17,7 +20,15 @@ function createSky() {
 
     setTimeout(() => {
         star.remove()
-    }, 10000);
+    }, time);
+
+}
+
+//ESTA FUNCION CONTROLA LA ANIMACION DE LA LANDING PAGE "HOME"//
+
+function createSky() {
+
+    createBackground('background-animation1', 4, 2, 10000);    
 
 };
 
@@ -27,26 +38,31 @@ setInterval(createSky, 150);
 
 function createSquare() {
 
-    const sobremi = document.getElementById('background-animation2');
-    const square = document.createElement('span');
-
-    let size = Math.random() * 50;
-
-    square.style.width = 20 + size + 'px'; 
-    square.style.height = 20 + size + 'px';
-
-    square.style.top = Math.random() * innerHeight + 'px';
-    square.style.left = Math.random() * innerWidth + 'px';
-
-    sobremi.appendChild(square);
-
-    setTimeout(() => {
-        square.remove()
-    }, 10000);
+    createBackground('background-animation2', 50, 20, 10000);    
 
 };
 
 setInterval(createSquare, 650);
+
+//ESTA FUNCION CONTROLA LA ANIMACION DE LA LANDING PAGE "PROYECTOS"//
+
+function createBubble() {
+
+    createBackground('background-animation4', 100, 10, 5000);    
+
+};
+
+setInterval(createBubble, 450);
+
+//ESTA FUNCION CONTROLA LA ANIMACION DE LA LANDING PAGE "CONTACTAME"//
+
+function createMirror() {
+
+    createBackground('background-animation5', 75, 10, 10000);    
+
+};
+
+setInterval(createMirror, 500);
 
 //ESTA FUNCION CONTROLA LA ANIMACION DE LA LANDING PAGE "TECNOLOGIAS"//
 
@@ -83,57 +99,6 @@ function createCircle(){
 
 setInterval(createCircle, 750);
 
-//ESTA FUNCION CONTROLA LA ANIMACION DE LA LANDING PAGE "PROYECTOS"//
-
-function createBubble() {
-
-    const proyect = document.getElementById('background-animation4');
-    const bubble = document.createElement('span');
-
-    let size = Math.random() * 100;
-
-    bubble.style.width = 10 + size + 'px'; 
-    bubble.style.height = 10 + size + 'px';
-
-    bubble.style.top = Math.random() * innerHeight + 'px';
-    bubble.style.left = Math.random() * innerWidth + 'px';
-
-    proyect.appendChild(bubble);
-
-    setTimeout(() => {
-        bubble.remove()
-    }, 5000);
-
-};
-
-setInterval(createBubble, 450);
-
-//ESTA FUNCION CONTROLA LA ANIMACION DE LA LANDING PAGE "CONTACTAME"//
-
-function createMirror() {
-
-    const contact = document.getElementById('background-animation5');
-    const mirror = document.createElement('span');
-
-    let size = Math.random() * 75;
-
-    mirror.style.width = 10 + size + 'px'; 
-    mirror.style.height = 10 + size + 'px';
-
-    mirror.style.top = Math.random() * innerHeight + 'px';
-    mirror.style.left = Math.random() * innerWidth + 'px';
-
-    contact.appendChild(mirror);
-
-    setTimeout(() => {
-        mirror.remove()
-    }, 10000);
-
-};
-
-setInterval(createMirror, 500);
-
-
 //ESTAS FUNCIONES CONTROLAN EL DESPLIEGUE DEL MENU EN LA VERSION MOBIL//
 
 function abrirMenu() {
@@ -148,6 +113,8 @@ document.getElementById('navicon').addEventListener('click', function() {
 
     const menuApertura = document.getElementById('menu');
     menuApertura.style.display = 'flex';
+
+    menuKey = false;
 });
 };
       
@@ -155,18 +122,22 @@ abrirMenu();
 
 function cerrarMenu() {
 
-    document.getElementById('navicon1').addEventListener('click', function() {
+    const target = 'navicon1'
+    window.addEventListener('mouseup', function(event) {
+        if(event.target !== target && menuKey === false) {
+            const iconoCerrar1 = document.getElementById('navicon1');
+            iconoCerrar1.style.display = 'none';
     
-        const iconoCerrar1 = document.getElementById('navicon1');
-        iconoCerrar1.style.display = 'none';
+            const iconoAbrir1 = document.getElementById('navicon');
+            iconoAbrir1.style.display = 'block';
     
-        const iconoAbrir1 = document.getElementById('navicon');
-        iconoAbrir1.style.display = 'block';
-    
-        const menuApertura1 = document.getElementById('menu');
-        menuApertura1.style.display = "none";
+            const menuApertura1 = document.getElementById('menu');
+            menuApertura1.style.display = "none";
+
+            menuKey = true;
+        };
     });
-    };
+};
     
 cerrarMenu();
 
@@ -221,39 +192,68 @@ function galeriaTech() {
 
 galeriaTech();
 
+//ESTA FUNCION CONTROLA LA TRANSICION ENTRE DIFERENTES SECCIONES.//
+
+const pageSections = [
+    'home',
+    'sobremi',
+    'tecnologias',
+    'proyectos',
+    'contacto'
+] 
+
+function sectionSelector (targetsection) {
+    
+    pageSections.forEach( function (sec) {
+        if(sec === targetsection) {
+            const targetSec = document.getElementById(targetsection);
+            targetSec.style.display = 'block';
+        }else{
+            const noTargetSection = document.getElementById(sec);
+            noTargetSection.style.display = 'none';
+        }
+
+        if(targetsection === 'home') {
+            const homeInvitacion = document.getElementById('invproyectos');
+            homeInvitacion.style.display = 'none';
+
+            const homeSaludo = document.getElementById('bienvenida');
+            homeSaludo.style.display = 'block';
+
+            const naviconhome = document.getElementById('navicon');
+            naviconhome.style.top = '1vh';
+
+        } else if(targetsection === 'tecnologias') {
+            const tecSaludo = document.getElementById('bienvenida');
+            tecSaludo.style.display = 'none';
+
+            const tecInvitacion = document.getElementById('invproyectos');
+            tecInvitacion.style.display = 'block';
+        
+            const navicontecnologias = document.getElementById('navicon');
+            navicontecnologias.style.top = '-2vh';
+        } else {
+            const otroSaludo = document.getElementById('bienvenida');
+            otroSaludo.style.display = 'none';
+
+            const otroInvitacion = document.getElementById('invproyectos');
+            otroInvitacion.style.display = 'none';
+        
+            const naviconcontactame = document.getElementById('navicon');
+            naviconcontactame.style.top = '-2vh';
+        }
+    })
+}
+
 //ESTA FUNCION CONTROLA LA TRANSICION A LA SECCION "HOME".//
 
 function homeP() {
+    
     document.getElementById('homebutton').addEventListener('click', function() {
 
-        const homepage = document.getElementById('home');
-        homepage.style.display = 'block';
-        
-        const sobremipage = document.getElementById('sobremi');
-        sobremipage.style.display = 'none';
-
-        const tecnologiapage = document.getElementById('tecnologias');
-        tecnologiapage.style.display = 'none';
-
-        const proyectopage = document.getElementById('proyectos');
-        proyectopage.style.display = 'none';
-
-        const contactopage = document.getElementById('contacto');
-        contactopage.style.display = 'none';
-
-        const invitacion = document.getElementById('invproyectos');
-        invitacion.style.display = 'none';
-
-        const saludo = document.getElementById('bienvenida');
-        saludo.style.display = 'block';
-
-        const naviconhome = document.getElementById('navicon');
-        naviconhome.style.top = '1vh';
-
-        
+        sectionSelector ('home');              
 
     });
-
 };
 
 homeP();
@@ -261,34 +261,12 @@ homeP();
 //ESTA FUNCION CONTROLA LA TRANSICION A LA SECCION "SOBRE MI".//
 
 function sobreMi() {
+    
     document.getElementById('sobremibutton').addEventListener('click', function() {
 
-        const homepage1 = document.getElementById('home');
-        homepage1.style.display = 'none';
-
-        const sobremipage1 = document.getElementById('sobremi');
-        sobremipage1.style.display = 'block';
-
-        const tecnologiapage1 = document.getElementById('tecnologias');
-        tecnologiapage1.style.display = 'none';
-
-        const proyectopage1 = document.getElementById('proyectos');
-        proyectopage1.style.display = 'none';
-
-        const contactopage1 = document.getElementById('contacto');
-        contactopage1.style.display = 'none';
-
-        const invitacion1 = document.getElementById('invproyectos');
-        invitacion1.style.display = 'none';
-
-        const saludo1 = document.getElementById('bienvenida');
-        saludo1.style.display = 'none';
-
-        const naviconsobremi = document.getElementById('navicon');
-        naviconsobremi.style.top = '-2vh';
+        sectionSelector ('sobremi');        
 
     });
-
 };
 
 sobreMi();
@@ -296,35 +274,12 @@ sobreMi();
 //ESTA FUNCION CONTROLA LA TRANSICION A LA SECCION "TECNOLOGIAS".//
 
 function tecnologiasP() {
+    
     document.getElementById('tecnologiasbutton').addEventListener('click', function() {
 
-
-        const homepage2 = document.getElementById('home');
-        homepage2.style.display = 'none';
-
-        const sobremipage2 = document.getElementById('sobremi');
-        sobremipage2.style.display = 'none';
-
-        const tecnologiapage2 = document.getElementById('tecnologias');
-        tecnologiapage2.style.display = 'block';
-
-        const proyectopage2 = document.getElementById('proyectos');
-        proyectopage2.style.display = 'none';
-
-        const contactopage2 = document.getElementById('contacto');
-        contactopage2.style.display = 'none';
-
-        const saludo2 = document.getElementById('bienvenida');
-        saludo2.style.display = 'none';
-
-        const invitacion2 = document.getElementById('invproyectos');
-        invitacion2.style.display = 'block';
-        
-        const navicontecnologias = document.getElementById('navicon');
-        navicontecnologias.style.top = '-2vh';
+        sectionSelector ('tecnologias');       
 
     });
-
 };
 
 tecnologiasP();
@@ -332,34 +287,12 @@ tecnologiasP();
 //ESTA FUNCION CONTROLA LA TRANSICION A LA SECCION "PROYECTOS".//
 
 function proyectosP() {
+    
     document.getElementById('proyectosbutton').addEventListener('click', function() {
 
-        const homepage3 = document.getElementById('home');
-        homepage3.style.display = 'none';
-
-        const sobremipage3 = document.getElementById('sobremi');
-        sobremipage3.style.display = 'none';
-
-        const tecnologiapage3 = document.getElementById('tecnologias');
-        tecnologiapage3.style.display = 'none';
-
-        const proyectopage3 = document.getElementById('proyectos');
-        proyectopage3.style.display = 'block';
-
-        const contactopage3 = document.getElementById('contacto');
-        contactopage3.style.display = 'none';
-
-        const saludo3 = document.getElementById('bienvenida');
-        saludo3.style.display = 'none';
-
-        const invitacion3 = document.getElementById('invproyectos');
-        invitacion3.style.display = 'none';
-        
-        const naviconproyectos = document.getElementById('navicon');
-        naviconproyectos.style.top = '-2vh';
+        sectionSelector ('proyectos');        
 
     });
-
 };
 
 proyectosP();
@@ -367,35 +300,11 @@ proyectosP();
 //ESTA FUNCION CONTROLA LA TRANSICION A LA SECCION "CONTACTAME".//
 
 function contactameP() {
+    
     document.getElementById('contactamebutton').addEventListener('click', function() {
 
-        const homepage4 = document.getElementById('home');
-        homepage4.style.display = 'none';
-
-        const sobremipage4 = document.getElementById('sobremi');
-        sobremipage4.style.display = 'none';
-
-        const tecnologiapage4 = document.getElementById('tecnologias');
-        tecnologiapage4.style.display = 'none';
-
-        const proyectopage4 = document.getElementById('proyectos');
-        proyectopage4.style.display = 'none';
-
-        const contactopage4 = document.getElementById('contacto');
-        contactopage4.style.display = 'block';
-
-        const saludo4 = document.getElementById('bienvenida');
-        saludo4.style.display = 'none';
-
-        const invitacion4 = document.getElementById('invproyectos');
-        invitacion4.style.display = 'none';
-        
-        const naviconcontactame = document.getElementById('navicon');
-        naviconcontactame.style.top = '-2vh';
+        sectionSelector ('contacto');        
 
     });
-
 };
 contactameP();
-
-
