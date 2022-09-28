@@ -124,7 +124,7 @@ function cerrarMenu() {
 
     const target = 'navicon1'
     window.addEventListener('mouseup', function(event) {
-        if(event.target !== target && menuKey === false) {
+        if(event.target !== target && !menuKey) {
             const iconoCerrar1 = document.getElementById('navicon1');
             iconoCerrar1.style.display = 'none';
     
